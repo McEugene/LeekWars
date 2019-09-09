@@ -1,0 +1,28 @@
+if (getWeapon() != WEAPON_PISTOL) {
+	setWeapon(WEAPON_PISTOL); // Warning: costs 1 TP	
+}
+
+var enemy = getNearestEnemy();
+var canMove = true;
+while (!hasSomethingToDo(enemy) && canMove) {
+	canMove = moveToward(enemy, 1) != 0;
+}
+
+if (hasSomethingToDo(enemy)) {
+	if (canUseWeapon(enemy)) {
+		useWeapon(enemy);
+		useWeapon(enemy);
+		useWeapon(enemy);
+	} else if (canUseChip(CHIP_SPARK, enemy)) {
+		useChip(CHIP_SPARK, enemy);
+		useChip(CHIP_SPARK, enemy);
+		useChip(CHIP_SPARK, enemy);
+	}
+}
+
+moveAwayFrom(enemy);
+
+function hasSomethingToDo(enemy) {
+	return canUseChip(CHIP_SPARK, enemy) 
+		|| canUseWeapon(enemy);
+}
