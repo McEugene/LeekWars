@@ -8,6 +8,10 @@ while (!hasSomethingToDo(enemy) && canMove) {
 	canMove = moveToward(enemy, 1) != 0;
 }
 
+if (shouldUseShield(enemy) && canUseChip(CHIP_HELMET, getLeek())) {
+	useChip(CHIP_HELMET, getLeek());
+}
+
 if (hasSomethingToDo(enemy)) {
 	if (canUseWeapon(enemy)) {
 		useWeapon(enemy);
@@ -25,4 +29,8 @@ moveAwayFrom(enemy);
 function hasSomethingToDo(enemy) {
 	return canUseChip(CHIP_SPARK, enemy) 
 		|| canUseWeapon(enemy);
+}
+
+function shouldUseShield(enemy) {
+	return getCellDistance(getCell(), getCell(enemy)) < 10 + 4;
 }
