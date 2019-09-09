@@ -1,11 +1,17 @@
-if (getWeapon() != WEAPON_PISTOL) {
-	setWeapon(WEAPON_PISTOL); // Warning: costs 1 TP	
+if (getWeapon() != WEAPON_DOUBLE_GUN) {
+	setWeapon(WEAPON_DOUBLE_GUN); // Warning: costs 1 TP	
 }
 
 var enemy = getNearestEnemy();
-var canMove = true;
-while (!hasSomethingToDo(enemy) && canMove) {
-	canMove = moveToward(enemy, 1) != 0;
+
+var mpsLeft = getTotalMP();
+while (shouldMove(enemy, getWeaponMaxRange(WEAPON_DOUBLE_GUN), mpsLeft) && mpsLeft > 0) {
+	moveToward(enemy, 1);
+	mpsLeft = mpsLeft - 1;
+}
+
+if (canUseChip(CHIP_BANDAGE, getLeek()) && isArmed(getLeek())) {
+	useChip(CHIP_BANDAGE, getLeek());
 }
 
 if (shouldUseShield(enemy) && canUseChip(CHIP_HELMET, getLeek())) {
@@ -26,6 +32,14 @@ if (hasSomethingToDo(enemy)) {
 
 moveAwayFrom(enemy);
 
+////////////
+// FUNCTIONS
+////////////
+function shouldMove(enemy, range, mpsLeft) {
+	return !hasSomethingToDo(enemy) 
+		|| (couldBeInRange(enemy,  range,  mpsLeft) 
+			&& !canUseWeapon(enemy));
+}
 function hasSomethingToDo(enemy) {
 	return canUseChip(CHIP_SPARK, enemy) 
 		|| canUseWeapon(enemy);
@@ -33,4 +47,12 @@ function hasSomethingToDo(enemy) {
 
 function shouldUseShield(enemy) {
 	return getCellDistance(getCell(), getCell(enemy)) < 10 + 4;
+}
+
+function isArmed(leek) {
+	return getTotalLife(leek) > getLife(leek);
+}
+
+function couldBeInRange(enemy, range, mpsLeft) {
+	return getPathLength(getCell(), getCell(enemy)) < range + mpsLeft;
 }
