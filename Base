@@ -16,7 +16,7 @@ while (shouldMove(enemy) && mpsLeft > 0) {
 useAllWeaponIfPossible(enemy);
 useOnEnemyIfPossible(CHIP_ROCK, enemy);
 useIfArmed(CHIP_CURE);
-useIfPossible(CHIP_HELMET, shouldUseShield(enemy));
+useIfPossible(CHIP_SHIELD, shouldUseShield(enemy));
 useIfArmed(CHIP_BANDAGE);
 useAllOnEnemyIfPossible(CHIP_SPARK, enemy);
 
@@ -26,20 +26,17 @@ useAllOnEnemyIfPossible(CHIP_SPARK, enemy);
 // FUNCTIONS
 ////////////
 function shouldMove(enemy) {
-	return !canUseWeapon(enemy);
-}
-function hasSomethingToDo(enemy) {
-	return canUseChip(CHIP_SPARK, enemy) 
-		|| canUseWeapon(enemy);
+	return !canUseWeapon(enemy) 
+		|| !lineOfSight(getCell(), getCell(enemy));
 }
 
 function shouldUseShield(enemy) {
-	return enemy != null && getCellDistance(getCell(), getCell(enemy)) < 10 + 4;
+	return getCell(enemy) != null && getCellDistance(getCell(), getCell(enemy)) < 10 + 4;
 }
 
 function isArmed(leek) {
 	return getTotalLife(leek) > getLife(leek);
-}
+}	
 
 function useIfArmed(chip) {
 	if (canUseChip(chip, getLeek()) && isArmed(getLeek())) {
@@ -74,6 +71,8 @@ function useWeaponIfPossible(enemy){
 function useAllWeaponIfPossible(enemy){
 	var result;
 	do {
+		debug("useAllWeaponIfPossible");
 		result = useWeaponIfPossible(enemy);
+		debug(result);
 	} while (result > 0);
 }
