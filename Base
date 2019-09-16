@@ -1,5 +1,5 @@
-if (getWeapon() != WEAPON_SHOTGUN) {
-	setWeapon(WEAPON_SHOTGUN); // Warning: costs 1 TP	
+if (getWeapon() != WEAPON_MAGNUM) {
+	setWeapon(WEAPON_MAGNUM); // Warning: costs 1 TP	
 }
 
 var enemy = getNearestEnemy();
@@ -71,8 +71,6 @@ function useWeaponIfPossible(enemy){
 function useAllWeaponIfPossible(enemy){
 	var result;
 	do {
-		debug("useAllWeaponIfPossible");
 		result = useWeaponIfPossible(enemy);
-		debug(result);
 	} while (result > 0);
 }
