@@ -10,12 +10,17 @@ while (shouldMove(enemy, getWeaponMaxRange(WEAPON_DOUBLE_GUN), mpsLeft) && mpsLe
 	mpsLeft = mpsLeft - 1;
 }
 
-if (canUseChip(CHIP_BANDAGE, getLeek()) && isArmed(getLeek())) {
+if ((canUseChip(CHIP_BANDAGE, getLeek()) || canUseChip(CHIP_CURE, getLeek())) && isArmed(getLeek())) {
 	useChip(CHIP_BANDAGE, getLeek());
+	useChip(CHIP_CURE, getLeek());
 }
 
 if (shouldUseShield(enemy) && canUseChip(CHIP_HELMET, getLeek())) {
 	useChip(CHIP_HELMET, getLeek());
+}
+
+if (canUseChip(CHIP_ROCK, enemy)) {
+	useChip(CHIP_ROCK, enemy);
 }
 
 if (hasSomethingToDo(enemy)) {
@@ -23,7 +28,8 @@ if (hasSomethingToDo(enemy)) {
 		useWeapon(enemy);
 		useWeapon(enemy);
 		useWeapon(enemy);
-	} else if (canUseChip(CHIP_SPARK, enemy)) {
+	}
+	if (canUseChip(CHIP_SPARK, enemy)) {
 		useChip(CHIP_SPARK, enemy);
 		useChip(CHIP_SPARK, enemy);
 		useChip(CHIP_SPARK, enemy);
