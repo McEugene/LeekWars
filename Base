@@ -12,11 +12,12 @@ while (shouldMove(enemy) && mpsLeft > 0) {
 	mpsLeft = mpsLeft - 1;
 }
 
-useIfPossible(CHIP_SHIELD, shouldUseShield(enemy));
+useIfPossible(CHIP_SHIELD, isNearEnough(enemy));
 useAllWeaponIfPossible(enemy);
 useOnEnemyIfPossible(CHIP_ROCK, enemy);
 useIfArmed(CHIP_CURE);
 useIfArmed(CHIP_BANDAGE);
+useIfPossible(CHIP_STRETCHING, isNearEnough(enemy));
 useAllOnEnemyIfPossible(CHIP_SPARK, enemy);
 
 //moveAwayFrom(enemy);
@@ -29,7 +30,7 @@ function shouldMove(enemy) {
 		|| !lineOfSight(getCell(), getCell(enemy));
 }
 
-function shouldUseShield(enemy) {
+function isNearEnough(enemy) {
 	return getCell(enemy) != null 
 	&& getCellDistance(getCell(), getCell(enemy)) < 10 + 4
 	&& getLife(enemy) > 120;
