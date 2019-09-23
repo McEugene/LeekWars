@@ -12,11 +12,10 @@ while (shouldMove(enemy) && mpsLeft > 0) {
 	mpsLeft = mpsLeft - 1;
 }
 
-
+useIfPossible(CHIP_SHIELD, shouldUseShield(enemy));
 useAllWeaponIfPossible(enemy);
 useOnEnemyIfPossible(CHIP_ROCK, enemy);
 useIfArmed(CHIP_CURE);
-useIfPossible(CHIP_SHIELD, shouldUseShield(enemy));
 useIfArmed(CHIP_BANDAGE);
 useAllOnEnemyIfPossible(CHIP_SPARK, enemy);
 
@@ -31,7 +30,9 @@ function shouldMove(enemy) {
 }
 
 function shouldUseShield(enemy) {
-	return getCell(enemy) != null && getCellDistance(getCell(), getCell(enemy)) < 10 + 4;
+	return getCell(enemy) != null 
+	&& getCellDistance(getCell(), getCell(enemy)) < 10 + 4
+	&& getLife(enemy) > 120;
 }
 
 function isArmed(leek) {
