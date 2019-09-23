@@ -1,15 +1,17 @@
-if (getWeapon() != WEAPON_MAGNUM) {
-	setWeapon(WEAPON_MAGNUM); // Warning: costs 1 TP	
-}
-
 var enemy = getNearestEnemy();
-
 var mpsLeft = getTotalMP();
-var enemyCells = getCellsToUseWeapon(enemy);
 
-while (shouldMove(enemy) && mpsLeft > 0) {
-	moveTowardCells(enemyCells, 1);
-	mpsLeft = mpsLeft - 1;
+if (couldBeCAC(enemy, mpsLeft)) {
+	setWeaponIfNeeded(WEAPON_BROADSWORD);
+	mpsLeft = mpsLeft - moveToward(enemy);
+} else {
+	setWeaponIfNeeded(WEAPON_MAGNUM);
+	var enemyCells = getCellsToUseWeapon(enemy);
+
+	while (shouldMove(enemy) && mpsLeft > 0) {
+		moveTowardCells(enemyCells, 1);
+		mpsLeft = mpsLeft - 1;
+	}
 }
 
 useIfPossible(CHIP_SHIELD, isNearEnough(enemy));
@@ -20,14 +22,24 @@ useIfArmed(CHIP_BANDAGE);
 useIfPossible(CHIP_STRETCHING, isNearEnough(enemy));
 useAllOnEnemyIfPossible(CHIP_SPARK, enemy);
 
-//moveAwayFrom(enemy);
+moveToward(enemy);
 
 ////////////
 // FUNCTIONS
 ////////////
+function setWeaponIfNeeded(weapon) {
+	if (getWeapon() != weapon) {
+		setWeapon(weapon); // Warning: costs 1 TP	
+	}
+}
+
 function shouldMove(enemy) {
 	return !canUseWeapon(enemy) 
 		|| !lineOfSight(getCell(), getCell(enemy));
+}
+
+function couldBeCAC(enemy, mpsLeft) {
+	return getPathLength(getCell(), getCell(enemy)) <= mpsLeft;
 }
 
 function isNearEnough(enemy) {
