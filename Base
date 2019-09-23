@@ -16,7 +16,7 @@ if (couldBeCAC(enemy, mpsLeft)) {
 
 useIfPossible(CHIP_SHIELD, isNearEnough(enemy));
 useAllWeaponIfPossible(enemy);
-useOnEnemyIfPossible(CHIP_ROCK, enemy);
+useOnEnemyIfPossible(CHIP_VENOM, enemy);
 useIfArmed(CHIP_CURE);
 useIfArmed(CHIP_BANDAGE);
 useIfPossible(CHIP_STRETCHING, isNearEnough(enemy));
