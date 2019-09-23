@@ -19,6 +19,7 @@ useAllWeaponIfPossible(enemy);
 useOnEnemyIfPossible(CHIP_VENOM, enemy);
 useIfArmed(CHIP_CURE);
 useIfArmed(CHIP_BANDAGE);
+useIfPossible(CHIP_HELMET, isNearEnough(enemy));
 useIfPossible(CHIP_STRETCHING, isNearEnough(enemy));
 useAllOnEnemyIfPossible(CHIP_SPARK, enemy);
 
