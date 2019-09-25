@@ -2,14 +2,25 @@ include("FUNCTIONS");
 var enemy = getNearestEnemy();
 var mpsLeft = getTotalMP();
 
-setWeaponIfNeeded(WEAPON_PISTOL);
 
-var enemyCells = getCellsToUseWeapon(enemy);
+var enemyCells = getCellsToUseWeapon(WEAPON_MACHINE_GUN, enemy);
+if (count(enemyCells) > 0 && getPathLengthForCells(getLeek(), enemyCells) <= mpsLeft) {
+	setWeaponIfNeeded(WEAPON_MACHINE_GUN);
+} else {
+	setWeaponIfNeeded(WEAPON_PISTOL);
+}
+
+enemyCells = getCellsToUseWeapon(enemy);
+
 while (shouldMove(enemy) && mpsLeft > 0) {
 	moveTowardCells(enemyCells, 1);
 	mpsLeft = mpsLeft - 1;
 }
 
 useAllWeaponIfPossible(enemy);
+useOnEnemyIfPossible(CHIP_ICE, enemy);
+useAllOnEnemyIfPossible(CHIP_SPARK, enemy);
 
 moveAwayFrom(enemy);
+
+
