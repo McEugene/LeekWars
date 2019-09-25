@@ -1,0 +1,15 @@
+include("FUNCTIONS");
+var enemy = getNearestEnemy();
+var mpsLeft = getTotalMP();
+
+setWeaponIfNeeded(WEAPON_PISTOL);
+
+var enemyCells = getCellsToUseWeapon(enemy);
+while (shouldMove(enemy) && mpsLeft > 0) {
+	moveTowardCells(enemyCells, 1);
+	mpsLeft = mpsLeft - 1;
+}
+
+useAllWeaponIfPossible(enemy);
+
+moveAwayFrom(enemy);
