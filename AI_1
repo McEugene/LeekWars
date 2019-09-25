@@ -1,0 +1,28 @@
+include("FUNCTIONS");
+var enemy = getNearestEnemy();
+var mpsLeft = getTotalMP();
+
+if (couldBeCAC(enemy, mpsLeft)) {
+	setWeaponIfNeeded(WEAPON_BROADSWORD);
+	mpsLeft = mpsLeft - moveToward(enemy);
+} else {
+	setWeaponIfNeeded(WEAPON_MAGNUM);
+	var enemyCells = getCellsToUseWeapon(enemy);
+
+	while (shouldMove(enemy) && mpsLeft > 0) {
+		moveTowardCells(enemyCells, 1);
+		mpsLeft = mpsLeft - 1;
+	}
+}
+
+useIfPossible(CHIP_SHIELD, isNearEnough(enemy));
+useAllWeaponIfPossible(enemy);
+useOnEnemyIfPossible(CHIP_VENOM, enemy);
+useIfArmed(CHIP_CURE);
+useIfArmed(CHIP_BANDAGE);
+summonIfPossible(CHIP_PUNY_BULB);
+useIfPossible(CHIP_HELMET, isNearEnough(enemy));
+useIfPossible(CHIP_STRETCHING, isNearEnough(enemy));
+useAllOnEnemyIfPossible(CHIP_SPARK, enemy);
+
+moveToward(enemy);
