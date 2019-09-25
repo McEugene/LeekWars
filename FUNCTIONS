@@ -1,0 +1,101 @@
+function setWeaponIfNeeded(weapon) {
+	if (getWeapon() != weapon) {
+		setWeapon(weapon); // Warning: costs 1 TP	
+	}
+}
+
+function shouldMove(enemy) {
+	return !canUseWeapon(enemy) 
+		|| !lineOfSight(getCell(), getCell(enemy));
+}
+
+function couldBeCAC(enemy, mpsLeft) {
+	return getPathLength(getCell(), getCell(enemy)) <= mpsLeft;
+}
+
+function isNearEnough(enemy) {
+	return getCell(enemy) != null 
+	&& getCellDistance(getCell(), getCell(enemy)) < 10 + 4
+	&& getLife(enemy) > 200;
+}
+
+function isArmed(leek) {
+	return getTotalLife(leek) > getLife(leek);
+}	
+
+function useIfArmed(chip) {
+	return useOnAllyIfArmed(chip, getLeek());
+}
+
+function useOnAllyIfArmed(chip, ally) {
+	if (canUseChip(chip, ally) && isArmed(ally)) {
+		return useChip(chip, ally);
+	}
+}
+
+function useIfPossible(chip, shouldUse) {
+	if (shouldUse && canUseChip(chip, getLeek())) {
+		useChip(chip, getLeek());
+	}
+}
+
+function useOnEnemyIfPossible(chip, enemy) {
+	if (canUseChip(chip, enemy)) {
+		return useChip(chip, enemy);
+	}
+}
+function useOnAllyIfPossible(chip, ally) {
+	if (canUseChip(chip, ally)) {
+		return useChip(chip, ally);
+	}
+}
+
+function useAllOnEnemyIfPossible(chip, enemy) {
+	var result;
+	do {
+		result = useOnEnemyIfPossible(chip, enemy);
+	} while (result > 0);
+}
+
+function useWeaponIfPossible(enemy) {
+	if (canUseWeapon(enemy)) {
+		return useWeapon(enemy);
+	}
+}
+function useAllWeaponIfPossible(enemy) {
+	var result;
+	do {
+		result = useWeaponIfPossible(enemy);
+	} while (result > 0);
+}
+
+function summonIfPossible(chip) {
+	var x = getCellX(getCell());
+	var y = getCellY(getCell());
+	// TODO refactor this ugly ass code
+	var cell = getCellFromXY(x - 1, y);
+	if (cell != null && canUseChipOnCell(chip, cell)) {
+		summon(chip, cell, punyBulbAI);
+	} else {
+		cell = getCellFromXY(x + 1, y);
+		if (cell != null && canUseChipOnCell(chip, cell)) {
+			summon(chip, cell, punyBulbAI);
+		} 
+	}
+}
+
+
+/////////////
+// PUNY BULB
+/////////////
+function punyBulbAI() {
+	var ally = getNearestAlly();
+	var enemy = getNearestEnemy();
+
+	moveToward(ally);
+	useOnAllyIfPossible(CHIP_HELMET, ally);
+	//useOnAllyIfPossible(CHIP_HELMET, ally);
+	useOnAllyIfArmed(CHIP_BANDAGE, ally);
+	useOnAllyIfPossible(CHIP_PROTEIN, ally);
+	useOnAllyIfPossible(CHIP_PEBBLE, enemy);
+}
